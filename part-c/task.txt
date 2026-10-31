@@ -1,0 +1,8 @@
+
+
+* **`-d` (Detached mode):**
+Runs the container in the background and keeps the terminal free for other commands.
+* **`--name opsdesk-nginx`:**
+Assigns a custom, easily identifiable name (`opsdesk-nginx`) to the container instead of a random auto-generated name.
+* **`-p 8082:80` (Port Publishing):**
+Maps port `8082` on the host machine to port `80` inside the container (`Host Port : Container Port`), forwarding incoming traffic to the container's web server.

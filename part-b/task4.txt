@@ -1,0 +1,8 @@
+
+
+* **`docker pull`:**
+Used only to download an image from a container registry (like Docker Hub) to the local system. It does not run or start a container.
+* **`docker run`:**
+Downloads the image (only if it is not already available locally), creates a new container instance, and starts it immediately (`docker create` + `docker start`).
+* **`docker start`:**
+Restarts an already existing, stopped container. It does not create a new container or download any new images.

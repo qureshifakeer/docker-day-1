@@ -1,0 +1,22 @@
+
+
+---
+
+**Task 2: Explain Docker Architecture**
+
+* **Docker CLI:**
+A command-line tool used by the user to type Docker commands (e.g., `docker run`, `docker ps`). It accepts user input and forwards it to the background Docker service.
+* **Docker Daemon (`dockerd`):**
+A persistent background engine service that performs heavy operations such as building images, running containers, managing storage volumes, and handling networking.
+* **Docker Engine:**
+A complete client-server application consisting of the Docker Daemon (`dockerd`), Docker CLI, and a REST API (Engine API) that facilitates communication between the CLI and the daemon.
+* **How CLI, API, and Daemon Work Together:**
+1. The user executes a command in the terminal using the Docker CLI (e.g., `docker run`).
+2. The CLI converts the command into an HTTP REST API call and sends it to the Docker Daemon via a UNIX Socket (`/var/run/docker.sock`).
+3. The Docker Daemon processes the request, creates or runs the container, and sends the response back to the CLI, which then displays the output on the terminal.
+
+
+* **Image vs Container vs Registry:**
+* **Docker Image:** An immutable, read-only template that packages the application code along with all its required libraries and dependencies.
+* **Docker Container:** A running, isolated instance created from an image, featuring a thin writable layer on top.
+* **Docker Registry:** A centralized storage service used to upload, share, and distribute versioned Docker images (e.g., Docker Hub).

@@ -1,0 +1,49 @@
+
+
+* **Why run multiple containers from the same image?**
+DevOps engineers run multiple containers from a single image for high availability and load balancing (Horizontal Scaling). When web traffic increases, distributing requests across multiple identical containers prevents overload, and if one container crashes, the others ensure uninterrupted service.
+* **Docker Desktop vs Docker Hub:**
+* **Docker Desktop:** A local client application installed on a computer to build, run, and manage Docker containers locally.
+* **Docker Hub:** A centralized, cloud-based registry used to host, share, and distribute Docker images publicly or privately across teams.
+
+
+* **Public Registries and Securing Proprietary Images:**
+* Anyone on the internet can pull and run images published in a public Docker Hub repository.
+* Organizations restrict unauthorized access to proprietary images by hosting them inside **Private Repositories** on Docker Hub or dedicated managed cloud registries like AWS ECR, Azure ACR, and Google Artifact Registry with Role-Based Access Control (RBAC).
+
+
+* **Tagging vs Pushing:**
+* **Tagging (`docker tag`):** Creates an alias or assigns a target repository name/version locally. It does not transfer any data over the network.
+* **Pushing (`docker push`):** Uploads the tagged local image over the internet to a container registry. Tagging alone never uploads an image automatically.
+
+
+* **Complete Flow (Registry to Running Container):**
+1. The developer executes `docker run <image-name>`.
+2. Docker Engine checks the local cache; if the image is missing, it automatically pulls the image from the configured registry (Docker Hub).
+3. The daemon unpacks the image layers, initializes an isolated process, and attaches a thin writable container layer on top.
+4. Port mappings, storage mounts, and network bridges are configured, launching the containerized application.
+
+
+
+---
+
+**Submission Command Log**
+
+| Command | Purpose | Observed Result |
+| --- | --- | --- |
+| `docker --version` | Verify the installed Docker CLI version | Installed CLI version displayed |
+| `docker version` | Display both client and daemon server information | Detailed engine and client versions shown |
+| `docker info` | Inspect host system resources and Docker configuration | System summary, memory, and container stats displayed |
+| `docker run hello-world` | Test engine functionality and container execution | Pulled image and printed "Hello from Docker!" message |
+| `docker ps -a` | List all containers including inactive ones | Listed `hello-world` with `Exited (0)` status |
+| `docker pull nginx:alpine` | Download the official alpine-based Nginx image | Pulled layers and completed download from Docker Hub |
+| `docker images` | List locally stored Docker images | Displayed image repositories, tags, IDs, and sizes |
+| `docker tag nginx:alpine devops-nginx:day2` | Create an alias tag for the local Nginx image | Created reference pointing to the identical Image ID |
+| `docker run -d --name opsdesk-nginx -p 8082:80 nginx:alpine` | Launch detached Nginx container mapped to port 8082 | Returned container ID and started service in background |
+| `docker ps` | Verify active, running containers | Displayed `opsdesk-nginx` with status `Up` on `0.0.0.0:8082->80/tcp` |
+| `docker logs opsdesk-nginx` | View application runtime logs and HTTP requests | Displayed server startup logs and browser request logs |
+| `docker exec opsdesk-nginx nginx -v` | Execute version check inside the running container | Returned `nginx version: nginx/x.x.x` |
+| `docker inspect opsdesk-nginx` | Inspect detailed low-level configuration of the container | Displayed complete JSON output with state and network details |
+| `docker stop opsdesk-nginx` | Gracefully halt the running container process | Sent SIGTERM and container exited gracefully |
+| `docker start opsdesk-nginx` | Restart the existing halted container | Re-activated container without creating a new instance |
+| `docker rm opsdesk-nginx` | Permanently delete the container and its writable layer | Container removed completely from the system listing |

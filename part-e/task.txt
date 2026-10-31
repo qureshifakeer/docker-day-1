@@ -1,0 +1,38 @@
+
+
+---
+
+**Task 6: Diagnose Troubleshooting Situations**
+
+* **Problem 1: `docker --version` works, but `docker version` cannot display server details.**
+* **Cause:** The Docker CLI is properly installed, but the background engine service (Docker Daemon / Docker Desktop) is not running.
+* **Troubleshooting Steps:** On Windows, verify that the Docker Desktop application is running. On Linux, check the service status by executing `sudo systemctl status docker`.
+
+
+* **Problem 2: An Nginx container was run, but it does not appear in `docker ps`.**
+* **Cause:** The container stopped immediately after starting, either because its main process crashed due to an error or because the foreground process completed and exited.
+* **Troubleshooting Steps:** Run `docker ps -a` to view all stopped containers and check the exit code. Then, inspect the failure reason using `docker logs <container-name>`.
+
+
+* **Problem 3: Error stating container name `opsdesk-nginx` is already in use.**
+* **Cause:** Another container (either running or stopped) already exists with the name `opsdesk-nginx`. Docker requires unique container names.
+* **Resolution:** Safely remove the existing container using `docker rm -f opsdesk-nginx`, or deploy the new container under a different name using `--name opsdesk-nginx-2`.
+
+
+* **Problem 4: Port 8082 is already in use on the host computer.**
+* **Resolution:** Map the container port `80` to any available, unused host port (such as `8085`).
+* **Command:** `docker run -d --name opsdesk-nginx -p 8085:80 nginx:alpine`
+* **Browser URL:** `http://localhost:8085`
+
+
+* **Problem 5: Docker commands fail with a permission error without `sudo` on Ubuntu.**
+* **Cause:** The Docker daemon runs with root privileges and binds to a UNIX socket owned by root. The current user account is not a member of the `docker` user group.
+* **Recommended Resolution:** Add the current user to the `docker` group by executing:
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+
+```
+
+
+* **Why Docker socket permissions should not be changed manually (`chmod 777`):** Giving world-writable permissions to `/var/run/docker.sock` creates a critical security vulnerability. It allows any non-privileged local user or malicious process to gain full root-level control over the host system.
